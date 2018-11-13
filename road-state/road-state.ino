@@ -54,18 +54,24 @@ void loop() {
         // Parsing
         const size_t bufferSize = JSON_ARRAY_SIZE(1) + JSON_OBJECT_SIZE(19) + 430;
         DynamicJsonBuffer jsonBuffer(bufferSize);
-        JsonObject& root = jsonBuffer.parseObject(http.getString());
+        //JsonObject& root = jsonBuffer.parseObject(http.getString());
+        JsonArray& root = jsonBuffer.parseArray(http.getString());
 
-        // Parameters
-        int id = root["id"]; // 1166
-        int surinkimo_data_unix = root["surinkimo_data_unix"]; // "1542033300"
-        const char* dangos_temperatura = root["dangos_temperatura"]; // "5.6"
-        const char* krituliu_tipas = root["krituliu_tipas"]; // "Nėra"
-        const char* krituliu_kiekis = root["krituliu_kiekis"]; // "0"
-        const char* kelio_danga = root["kelio_danga"]; // "Drėgna"
-        const char* sukibimo_koeficientas = root["sukibimo_koeficientas"]; // "0.81"
-        //const char* perspejimai0_pavadinimas = root["perspejimai"][0]["pavadinimas"]; // "Kelio dangos būklė: Drėgna"
-        // const char* root_0_vejo_greitis_vidut = root_0["vejo_greitis_vidut"]; // "2.7"
+        JsonObject& root_0 = root[0];
+        const char* surinkimo_data_unix = root_0["surinkimo_data_unix"]; // "1542124353"
+        const char* id = root_0["id"]; // "2709"
+        const char* surinkimo_data = root_0["surinkimo_data"]; // "2018-11-13 17:52:33"
+        //const char* t_0_oro_temperatura = root_0["oro_temperatura"]; // "7"
+        //const char* root_0_vejo_greitis_vidut = root_0["vejo_greitis_vidut"]; // "4.47"
+        const char* krituliu_tipas = root_0["krituliu_tipas"]; // "N"
+        const char* krituliu_kiekis = root_0["krituliu_kiekis"]; //
+        const char* dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
+        //const char* root_0_matomumas = root_0["matomumas"]; // "N"
+        //const char* root_0_rasos_taskas = root_0["rasos_taskas"]; // "5.36"
+        const char* kelio_danga = root_0["kelio_danga"]; // "Drėgna"
+        //const char* root_0_vejo_greitis_maks = root_0["vejo_greitis_maks"]; // "4.47"
+        //const char* root_0_vejo_kryptis = root_0["vejo_kryptis"]; // "Pietų"
+        const char* sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
         
         // Output to serial monitor
         Serial.print("Irenginio ID: ");
