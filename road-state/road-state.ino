@@ -40,7 +40,8 @@ void loop() {
     for (int device = 0; device < deviceCount; device++)
     {
         int id = deviceIDs[device];
-        String url = "http://eismoinfo.lt/weather-conditions-retrospective?id=" + id;
+        String url = "http://eismoinfo.lt/weather-conditions-retrospective?id=";
+        url = url + id;
         url = url + "&number=1";
         // Start reading device data
         Serial.print("URL: ");
