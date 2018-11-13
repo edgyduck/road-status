@@ -1,3 +1,5 @@
+#include <ArduinoJson.h>
+
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
@@ -37,8 +39,12 @@ void loop() {
 
     for (int device = 0; device < deviceCount; device++)
     {
-        String url = "http://eismoinfo.lt/weather-conditions-retrospective?id=" + device + "&number=1";
+        int id = deviceIDs[device];
+        String url = "http://eismoinfo.lt/weather-conditions-retrospective?id=" + id;
+        url = url + "&number=1";
         // Start reading device data
+        Serial.print("URL: ");
+        Serial.println(url);
         http.begin(url);
         int httpCode = http.GET();
 
@@ -51,7 +57,7 @@ void loop() {
 
         // Parameters
         int id = root["id"]; // 1166
-        int surinkimo_data_unix = root["surinkimo_data_unix"] // "1542033300"
+        int surinkimo_data_unix = root["surinkimo_data_unix"]; // "1542033300"
         const char* dangos_temperatura = root["dangos_temperatura"]; // "5.6"
         const char* krituliu_tipas = root["krituliu_tipas"]; // "Nėra"
         const char* krituliu_kiekis = root["krituliu_kiekis"]; // "0"
