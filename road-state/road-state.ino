@@ -130,6 +130,8 @@ void loop() {
         display.println(kelio_danga);
         display.print("Sukibimas: ");
         display.println(sukibimo_koeficientas);
+        display.print("Krituliai: ");
+        display.println(krituliu_tipas);
         display.println(surinkimo_data);
         display.display();
         
