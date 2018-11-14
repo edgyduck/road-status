@@ -67,9 +67,9 @@ void loop() {
     int deviceIDs[] = {1166, 1164, 308, 1208, 1181, 2709, 310, 1262, 413}; // Vilnius - Garliava devices
     int deviceCount = 9;
 
-    for (int device = 0; device < deviceCount; device++)
+    for (int i = 0; i < deviceCount; i++)
     {
-        int id = deviceIDs[device];
+        int id = deviceIDs[i];
         String url = "http://eismoinfo.lt/weather-conditions-retrospective?id=";
         url = url + id;
         url = url + "&number=1";
@@ -84,11 +84,10 @@ void loop() {
         // Parsing
         const size_t bufferSize = JSON_ARRAY_SIZE(1) + JSON_OBJECT_SIZE(19) + 430;
         DynamicJsonBuffer jsonBuffer(bufferSize);
-        //JsonObject& root = jsonBuffer.parseObject(http.getString());
         JsonArray& root = jsonBuffer.parseArray(http.getString());
 
         JsonObject& root_0 = root[0];
-        const char* surinkimo_data_unix = root_0["surinkimo_data_unix"]; // "1542124353"
+        const char* surinkimo_data = root_0["surinkimo_data"]; // "1542124353"
         const char* id = root_0["id"]; // "2709"
         const char* surinkimo_data = root_0["surinkimo_data"]; // "2018-11-13 17:52:33"
         const char* krituliu_tipas = root_0["krituliu_tipas"]; // "N"
@@ -102,11 +101,36 @@ void loop() {
         display.setTextSize(2);
         display.setTextColor(WHITE);
         display.setCursor(0,0);
-        display.print("Stotele: ");
-        display.println(id);
+        // switch here to define device name and display on the screen
+        switch (id) 
+        {
+          case 1166:
+            display.println("VILNIUS");
+          case 1164:
+            display.println("DIDZIULIS");
+          case 308:
+            display.println("VIEVIS");
+          case 1208:
+            display.println("BACKONYS");
+          case 1181:
+            display.println("RUMSISKES");
+          case 2709:
+            display.println("MESKINIS");
+          case 310:
+            display.println("IX FORTAS");
+          case 1262:
+            display.println("VILIJAMPOLE");
+          case 413:
+            display.println("GARLIAVA");
+        }
+        // end of switch
+        display.setTextSize(1);
+        display.setTextColor(WHITE);
         display.print("Danga: ");
         display.println(kelio_danga);
-        
+        display.print("Sukibimas: ");
+        display.println(sukibimo_koeficientas);
+        display.println(surinkimo_data);
         display.display();
         
         
