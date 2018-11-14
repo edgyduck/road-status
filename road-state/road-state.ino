@@ -1,8 +1,19 @@
-#include <ArduinoJson.h>
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_GFX.h>
+// OLED display pins: VCC, GND, SCL, SDA
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
+
+// OLED display TWI address
+#define OLED_ADDR   0x3C
+Adafruit_SSD1306 display(-1);
+
+#if (SSD1306_LCDHEIGHT != 64)
+#error("Height incorrect, please fix Adafruit_SSD1306.h!");
+#endif
 
 // WiFi Parameters
 const char* ssid = "Good Life";
@@ -16,6 +27,25 @@ void setup() {
     delay(1000);
     Serial.println("Connecting...");
   }
+
+  display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
+  display.clearDisplay();
+  display.display();
+
+  // display a pixel in each corner of the screen
+  display.drawPixel(0, 0, WHITE);
+  display.drawPixel(127, 0, WHITE);
+  display.drawPixel(0, 63, WHITE);
+  display.drawPixel(127, 63, WHITE);
+
+  // display a line of text
+  display.setTextSize(3);
+  display.setTextColor(WHITE);
+  display.setCursor(0,30);
+  display.print("HoHoHo!");
+
+  // update display with all of the above graphics
+  display.display();
 }
 
 void loop() {
@@ -61,17 +91,24 @@ void loop() {
         const char* surinkimo_data_unix = root_0["surinkimo_data_unix"]; // "1542124353"
         const char* id = root_0["id"]; // "2709"
         const char* surinkimo_data = root_0["surinkimo_data"]; // "2018-11-13 17:52:33"
-        //const char* t_0_oro_temperatura = root_0["oro_temperatura"]; // "7"
-        //const char* root_0_vejo_greitis_vidut = root_0["vejo_greitis_vidut"]; // "4.47"
         const char* krituliu_tipas = root_0["krituliu_tipas"]; // "N"
         const char* krituliu_kiekis = root_0["krituliu_kiekis"]; //
         const char* dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
-        //const char* root_0_matomumas = root_0["matomumas"]; // "N"
-        //const char* root_0_rasos_taskas = root_0["rasos_taskas"]; // "5.36"
         const char* kelio_danga = root_0["kelio_danga"]; // "Drėgna"
-        //const char* root_0_vejo_greitis_maks = root_0["vejo_greitis_maks"]; // "4.47"
-        //const char* root_0_vejo_kryptis = root_0["vejo_kryptis"]; // "Pietų"
         const char* sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
+
+        display.clearDisplay();
+        display.display();
+        display.setTextSize(2);
+        display.setTextColor(WHITE);
+        display.setCursor(0,0);
+        display.print("Stotele: ");
+        display.println(id);
+        display.print("Danga: ");
+        display.println(kelio_danga);
+        
+        display.display();
+        
         
         // Output to serial monitor
         Serial.print("Irenginio ID: ");
@@ -93,6 +130,7 @@ void loop() {
         }
 
         http.end();   //Close connection
+        delay(2000);
     }     // End reading device data
 
   }
