@@ -10,7 +10,6 @@
 // OLED display TWI address
 #define OLED_ADDR   0x3C
 Adafruit_SSD1306 display(-1);
-
 #if (SSD1306_LCDHEIGHT != 64)
 #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
