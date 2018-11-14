@@ -86,8 +86,8 @@ void loop() {
         JsonArray& root = jsonBuffer.parseArray(http.getString());
 
         JsonObject& root_0 = root[0];
-        const char* surinkimo_data = root_0["surinkimo_data"]; // "1542124353"
-        const char* id = root_0["id"]; // "2709"
+        //const char* surinkimo_data = root_0["surinkimo_data"]; // "1542124353"
+        int id = root_0["id"]; // "2709"
         const char* surinkimo_data = root_0["surinkimo_data"]; // "2018-11-13 17:52:33"
         const char* krituliu_tipas = root_0["krituliu_tipas"]; // "N"
         const char* krituliu_kiekis = root_0["krituliu_kiekis"]; //
@@ -95,36 +95,38 @@ void loop() {
         const char* kelio_danga = root_0["kelio_danga"]; // "Drėgna"
         const char* sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
 
+        const char* stotele;
+        // switch here to define device name and display on the screen
+        if (id == 1166)
+            stotele = "VILNIUS";
+        if (id == 1164)
+            stotele = "DIDZIULIS";
+        if (id == 308)
+            stotele = "VIEVIS";
+        if (id == 1208)
+            stotele = "BACKONYS";
+        if (id == 1181)
+            stotele = "RUMSISKES";
+        if (id == 2709)
+            stotele = "MESKINIS";
+        if (id == 310)
+            stotele = "IX FORTAS";
+        if (id == 1262)
+            stotele = "SLABOTKE";
+        if (id == 413)
+            stotele = "GARLIAVA";
+        
+        // end of switch
+        
         display.clearDisplay();
         display.display();
         display.setTextSize(2);
         display.setTextColor(WHITE);
         display.setCursor(0,0);
-        // switch here to define device name and display on the screen
-        switch (id) 
-        {
-          case 1166:
-            display.println("VILNIUS");
-          case 1164:
-            display.println("DIDZIULIS");
-          case 308:
-            display.println("VIEVIS");
-          case 1208:
-            display.println("BACKONYS");
-          case 1181:
-            display.println("RUMSISKES");
-          case 2709:
-            display.println("MESKINIS");
-          case 310:
-            display.println("IX FORTAS");
-          case 1262:
-            display.println("VILIJAMPOLE");
-          case 413:
-            display.println("GARLIAVA");
-        }
-        // end of switch
+        display.println(stotele);
         display.setTextSize(1);
         display.setTextColor(WHITE);
+        display.println("");
         display.print("Danga: ");
         display.println(kelio_danga);
         display.print("Sukibimas: ");
@@ -138,10 +140,10 @@ void loop() {
         // Output to serial monitor
         Serial.print("Irenginio ID: ");
         Serial.println(id);
-        //Serial.print("Irenginys: ");
-        //Serial.println(pavadinimas);
+        Serial.print("Irenginys: ");
+        Serial.println(stotele);
         Serial.print("Surinkimo data: ");
-        Serial.println(surinkimo_data_unix);
+        Serial.println(surinkimo_data);
         Serial.print("Dangos temp: "); 
         Serial.println(dangos_temperatura);
         Serial.print("Krituliu tipas: "); 
@@ -155,7 +157,7 @@ void loop() {
         }
 
         http.end();   //Close connection
-        delay(2000);
+        delay(3000);
     }     // End reading device data
 
   }
