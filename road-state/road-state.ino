@@ -88,12 +88,12 @@ void loop() {
         JsonObject& root_0 = root[0];
         //const char* surinkimo_data = root_0["surinkimo_data"]; // "1542124353"
         int id = root_0["id"]; // "2709"
-        const char* surinkimo_data = root_0["surinkimo_data"]; // "2018-11-13 17:52:33"
-        const char* krituliu_tipas = root_0["krituliu_tipas"]; // "N"
-        const char* krituliu_kiekis = root_0["krituliu_kiekis"]; //
-        const char* dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
-        const char* kelio_danga = root_0["kelio_danga"]; // "Drėgna"
-        const char* sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
+        String surinkimo_data = root_0["surinkimo_data"]; // "2018-11-13 17:52:33"
+        String krituliu_tipas = root_0["krituliu_tipas"]; // "N"
+        String krituliu_kiekis = root_0["krituliu_kiekis"]; //
+        String dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
+        String kelio_danga = root_0["kelio_danga"]; // "Drėgna"
+        String sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
 
         const char* stotele;
         // switch here to define device name and display on the screen
@@ -127,12 +127,46 @@ void loop() {
         display.setTextSize(1);
         display.setTextColor(WHITE);
         display.println("");
-        display.print("Danga: ");
-        display.println(kelio_danga);
-        display.print("Sukibimas: ");
-        display.println(sukibimo_koeficientas);
-        display.print("Krituliai: ");
-        display.println(krituliu_tipas);
+
+        if (kelio_danga == "Sausa")
+        {
+          display.setTextSize(2);
+          display.println("SAUSA");
+          display.setTextSize(1);
+          display.println("");
+        }
+        else if (kelio_danga == "Dru0117gna")
+        {
+          display.setTextSize(2);
+          display.println("DREGNA");
+          display.setTextSize(1);
+          display.println("");
+        }
+        else if (kelio_danga == "u0160lapia")
+        {
+          display.setTextSize(2);
+          display.println("SLAPIA");
+          //display.println("");
+          display.setTextSize(1);
+          display.print("K: ");
+          display.println(krituliu_tipas);
+          display.print("Sukibimas: ");
+          display.println(sukibimo_koeficientas);
+
+        }
+        else
+        {
+          display.setTextSize(1);
+          display.println("");
+          display.print("D: ");
+          display.println(kelio_danga);
+          display.print("K: ");
+          display.println(krituliu_tipas);
+          display.print("Sukibimas: ");
+          display.println(sukibimo_koeficientas);
+        }
+        
+        
         display.println(surinkimo_data);
         display.display();
         
@@ -157,10 +191,10 @@ void loop() {
         }
 
         http.end();   //Close connection
-        delay(3000);
+        delay(5000);
     }     // End reading device data
 
   }
   // Delay
-  delay(60000);
+  delay(10000);
 }
