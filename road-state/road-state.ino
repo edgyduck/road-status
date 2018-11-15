@@ -101,7 +101,10 @@ void loop() {
         String krituliu_kiekis = root_0["krituliu_kiekis"]; //
         String dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
         String kelio_danga = root_0["kelio_danga"]; // "Drėgna"
-        String sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
+        float sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
+        float sukibimo_koeficientas_toint = sukibimo_koeficientas * 100;
+        int sukibimo_koeficientas_int = round(sukibimo_koeficientas_toint);
+        String sukibimas;
 
         const char* stotele;
         if (id == 1166)
@@ -123,7 +126,9 @@ void loop() {
         if (id == 413)
             stotele = "GARLIAVA";
         
-        
+        // krituliu_tipas translation
+        if (krituliu_tipas == "N\u0117ra" || krituliu_tipas == "N" || krituliu_tipas == null)
+          krituliu_tipas = "-";
         
         display.clearDisplay();
         display.display();
@@ -138,37 +143,43 @@ void loop() {
         if (kelio_danga == "Sausa")
         {
           display.setTextSize(2);
-          display.println("  Sausa");
+          display.println("KD Sausa");
           display.setTextSize(1);
           display.println("");
         }
         else if (kelio_danga == "Dru0117gna")
         {
           display.setTextSize(2);
-          display.println("  Dregna");
+          display.println("KD Dregna");
           display.setTextSize(1);
           display.println("");
         }
         else if (kelio_danga == "u0160lapia")
         {
           display.setTextSize(2);
-          display.println("! Slapia");
+          display.println("KD Slapia");
           display.setTextSize(1);
           display.print("K: ");
           display.println(krituliu_tipas);
           display.print("Sukibimas: ");
-          display.println(sukibimo_koeficientas);
+          display.println(sukibimo_koeficientas_int);
 
         }
         else if (kelio_danga == "Apsnigta")
         {
           display.setTextSize(2);
           display.println("* SNIEGAS!");
-          display.setTextSize(1);
-          display.print("K: ");
-          display.println(krituliu_tipas);
-          display.print("Sukibimas: ");
-          display.println(sukibimo_koeficientas);
+          if (sukibimo_koeficientas_int < 30) {
+            sukibimas = "! SLIDU"
+            display.println(sukibimas);
+          }
+          else {            
+            display.setTextSize(1);
+            display.print("K: ");
+            display.println(krituliu_tipas);
+            display.print("Sukibimas: ");
+            display.println(sukibimo_koeficientas_int);
+          }
 
         }
         else
@@ -180,7 +191,7 @@ void loop() {
           display.print("K: ");
           display.println(krituliu_tipas);
           display.print("Sukibimas: ");
-          display.println(sukibimo_koeficientas);
+          display.println(sukibimo_koeficientas_int);
         }
         
         
