@@ -20,12 +20,6 @@ const char* password = "LifeIsGood";
 
 void setup() {
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
- 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.println("Connecting...");
-  }
 
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   display.clearDisplay();
@@ -37,20 +31,34 @@ void setup() {
   display.drawPixel(0, 63, WHITE);
   display.drawPixel(127, 63, WHITE);
 
-  // display a line of text
-  display.setTextSize(3);
-  display.setTextColor(WHITE);
-  display.setCursor(0,30);
-  display.print("HoHoHo!");
-
-  // update display with all of the above graphics
-  display.display();
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+      // display a line of text
+    display.setTextSize(2);
+    display.setTextColor(WHITE);
+    display.setCursor(0,10);
+    display.print("Connecting to Wifi...");
+    // update display with all of the above graphics
+    display.display();
+    delay(1000);
+    Serial.println("Connecting...");
+  }
+  
 }
 
 void loop() {
   // Check WiFi Status
   if (WiFi.status() == WL_CONNECTED) {
 
+    display.clearDisplay();
+    display.display();
+    display.setTextSize(3);
+    display.setTextColor(WHITE);
+    display.setCursor(6,30);
+    display.print("Connected!");
+    display.display();
+    delay(2000);
+    
     HTTPClient http;  //Object of class HTTPClient
     
     // Define device IDs: 
@@ -96,7 +104,6 @@ void loop() {
         String sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
 
         const char* stotele;
-        // switch here to define device name and display on the screen
         if (id == 1166)
             stotele = "VILNIUS";
         if (id == 1164)
@@ -116,7 +123,7 @@ void loop() {
         if (id == 413)
             stotele = "GARLIAVA";
         
-        // end of switch
+        
         
         display.clearDisplay();
         display.display();
@@ -131,22 +138,32 @@ void loop() {
         if (kelio_danga == "Sausa")
         {
           display.setTextSize(2);
-          display.println("SAUSA");
+          display.println("  Sausa");
           display.setTextSize(1);
           display.println("");
         }
         else if (kelio_danga == "Dru0117gna")
         {
           display.setTextSize(2);
-          display.println("DREGNA");
+          display.println("  Dregna");
           display.setTextSize(1);
           display.println("");
         }
         else if (kelio_danga == "u0160lapia")
         {
           display.setTextSize(2);
-          display.println("SLAPIA");
-          //display.println("");
+          display.println("! Slapia");
+          display.setTextSize(1);
+          display.print("K: ");
+          display.println(krituliu_tipas);
+          display.print("Sukibimas: ");
+          display.println(sukibimo_koeficientas);
+
+        }
+        else if (kelio_danga == "Apsnigta")
+        {
+          display.setTextSize(2);
+          display.println("* SNIEGAS!");
           display.setTextSize(1);
           display.print("K: ");
           display.println(krituliu_tipas);
