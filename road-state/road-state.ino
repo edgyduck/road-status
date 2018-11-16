@@ -91,22 +91,9 @@ void loop() {
         String krituliu_tipas = root_0["krituliu_tipas"]; // "N"
         String krituliu_kiekis = root_0["krituliu_kiekis"]; //
         String dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
+        int matomumas = root_0["matomumas"]; // 2000
         String kelio_danga = root_0["kelio_danga"]; // "Drėgna"
         float sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
-        String sukibimas;
-        if (isnan(sukibimo_koeficientas))
-          sukibimas = "-";
-        else
-        {
-          float sukibimo_koeficientas_toint = sukibimo_koeficientas * 100;
-          int sukibimo_koeficientas_int = round(sukibimo_koeficientas_toint);
-          if (sukibimo_koeficientas_int < 30)
-            sukibimas = "! SLIDU";
-          else if (sukibimo_koeficientas_int > 80)
-            sukibimas = " Geras";
-          else if (sukibimo_koeficientas_int >= 30 && sukibimo_koeficientas_int <= 80)
-            sukibimas = String(sukibimo_koeficientas_int);
-        }
 
         const char* stotele;
         if (id == 1166)
@@ -142,20 +129,57 @@ void loop() {
         display.setTextColor(WHITE);
         display.println("");
 
+// First determine the road traction
+        String sukibimas;
+        if (isnan(sukibimo_koeficientas))
+          sukibimas = "-";
+        else
+        {
+          float sukibimo_koeficientas_toint = sukibimo_koeficientas * 100;
+          int sukibimo_koeficientas_int = round(sukibimo_koeficientas_toint);
+          if (sukibimo_koeficientas_int > 80)
+          {
+            sukibimas = " Geras";
+            //do nothing
+          }
+          else if (sukibimo_koeficientas_int < 30)
+          {
+            sukibimas = "! SLIDU";
+            // display to the screen
+            display.println("");
+            display.setTextSize(2);
+            display.println(sukibimas);
+            display.setTextSize(1);
+            display.println("");
+          }
+          else if (sukibimo_koeficientas_int >= 30 && sukibimo_koeficientas_int <= 80)
+          {
+            sukibimas = String(sukibimo_koeficientas_int);
+            //display to the screen
+            display.println("");
+            display.setTextSize(2);
+            display.print("S: ");
+            display.println(sukibimas);
+            display.setTextSize(1);
+            display.println("");
+          }
+        }
+//*********************************************************************
         if (kelio_danga == "null")
+        {
           kelio_danga = "-";
-
+          // display to the screen
+        }
+          
         if (kelio_danga == "Sausa")
         {
+          // do nothing
+        }
+        if (kelio_danga == "Dru0117gna")
+        {
+          display.println("");
           display.setTextSize(2);
           display.println("KD Sausa");
-          display.setTextSize(1);
-          display.println("");
-        }
-        else if (kelio_danga == "Dru0117gna")
-        {
-          display.setTextSize(2);
-          display.println("KD Dregna");
           display.setTextSize(1);
           display.println("");
         }
@@ -168,7 +192,6 @@ void loop() {
           display.println(krituliu_tipas);
           display.print("Sukibimas: ");
           display.println(sukibimas);
-
         }
         else if (kelio_danga == "Apsnigta")
         {
