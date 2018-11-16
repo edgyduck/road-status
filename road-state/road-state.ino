@@ -37,7 +37,7 @@ void setup() {
     display.setTextSize(2);
     display.setTextColor(WHITE);
     display.setCursor(0,10);
-    display.print("Connecting to Wifi...");
+    display.print("Connecting to Wifi..");
     // update display with all of the above graphics
     display.display();
     delay(1000);
@@ -49,15 +49,6 @@ void setup() {
 void loop() {
   // Check WiFi Status
   if (WiFi.status() == WL_CONNECTED) {
-
-    display.clearDisplay();
-    display.display();
-    display.setTextSize(3);
-    display.setTextColor(WHITE);
-    display.setCursor(6,30);
-    display.print("Connected!");
-    display.display();
-    delay(2000);
     
     HTTPClient http;  //Object of class HTTPClient
     
@@ -102,9 +93,20 @@ void loop() {
         String dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
         String kelio_danga = root_0["kelio_danga"]; // "Drėgna"
         float sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
-        float sukibimo_koeficientas_toint = sukibimo_koeficientas * 100;
-        int sukibimo_koeficientas_int = round(sukibimo_koeficientas_toint);
         String sukibimas;
+        if (isnan(sukibimo_koeficientas))
+          sukibimas = "-";
+        else
+        {
+          float sukibimo_koeficientas_toint = sukibimo_koeficientas * 100;
+          int sukibimo_koeficientas_int = round(sukibimo_koeficientas_toint);
+          if (sukibimo_koeficientas_int < 30)
+            sukibimas = "! SLIDU";
+          else if (sukibimo_koeficientas_int > 80)
+            sukibimas = " Geras";
+          else if (sukibimo_koeficientas_int >= 30 && sukibimo_koeficientas_int <= 80)
+            sukibimas = String(sukibimo_koeficientas_int);
+        }
 
         const char* stotele;
         if (id == 1166)
@@ -127,7 +129,7 @@ void loop() {
             stotele = "GARLIAVA";
         
         // krituliu_tipas translation
-        if (krituliu_tipas == "N\u0117ra" || krituliu_tipas == "N" || krituliu_tipas == null)
+        if (krituliu_tipas == "N\u0117ra" || krituliu_tipas == "N" || krituliu_tipas == "null")
           krituliu_tipas = "-";
         
         display.clearDisplay();
@@ -139,6 +141,9 @@ void loop() {
         display.setTextSize(1);
         display.setTextColor(WHITE);
         display.println("");
+
+        if (kelio_danga == "null")
+          kelio_danga = "-";
 
         if (kelio_danga == "Sausa")
         {
@@ -162,24 +167,17 @@ void loop() {
           display.print("K: ");
           display.println(krituliu_tipas);
           display.print("Sukibimas: ");
-          display.println(sukibimo_koeficientas_int);
+          display.println(sukibimas);
 
         }
         else if (kelio_danga == "Apsnigta")
         {
           display.setTextSize(2);
           display.println("* SNIEGAS!");
-          if (sukibimo_koeficientas_int < 30) {
-            sukibimas = "! SLIDU"
-            display.println(sukibimas);
-          }
-          else {            
-            display.setTextSize(1);
-            display.print("K: ");
-            display.println(krituliu_tipas);
-            display.print("Sukibimas: ");
-            display.println(sukibimo_koeficientas_int);
-          }
+          display.println(sukibimas);
+          display.setTextSize(1);
+          display.print("K: ");
+          display.println(krituliu_tipas);
 
         }
         else
@@ -191,7 +189,7 @@ void loop() {
           display.print("K: ");
           display.println(krituliu_tipas);
           display.print("Sukibimas: ");
-          display.println(sukibimo_koeficientas_int);
+          display.println(sukibimas);
         }
         
         
