@@ -90,7 +90,7 @@ void loop() {
         String surinkimo_data = root_0["surinkimo_data"]; // "2018-11-13 17:52:33"
         String krituliu_tipas = root_0["krituliu_tipas"]; // "N"
         String krituliu_kiekis = root_0["krituliu_kiekis"]; //
-        String dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
+        float dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
         int matomumas = root_0["matomumas"]; // 2000
         String kelio_danga = root_0["kelio_danga"]; // "Drėgna"
         float sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
@@ -114,11 +114,6 @@ void loop() {
             stotele = "SLABOTKE";
         if (id == 413)
             stotele = "GARLIAVA";
-        
-        // krituliu_tipas translation
-        if (krituliu_tipas == "N\u0117ra" || krituliu_tipas == "N" || krituliu_tipas == "null")
-          krituliu_tipas = "-";
-        
         display.clearDisplay();
         display.display();
         display.setTextSize(2);
@@ -129,7 +124,6 @@ void loop() {
         display.setTextColor(WHITE);
         display.println("");
 
-// First determine the road traction
         String sukibimas;
         if (isnan(sukibimo_koeficientas))
           sukibimas = "-";
@@ -138,85 +132,47 @@ void loop() {
           float sukibimo_koeficientas_toint = sukibimo_koeficientas * 100;
           int sukibimo_koeficientas_int = round(sukibimo_koeficientas_toint);
           if (sukibimo_koeficientas_int > 80)
-          {
             sukibimas = " Geras";
-            //do nothing
-          }
           else if (sukibimo_koeficientas_int < 30)
-          {
             sukibimas = "! SLIDU";
-            // display to the screen
-            display.println("");
-            display.setTextSize(2);
-            display.println(sukibimas);
-            display.setTextSize(1);
-            display.println("");
-          }
           else if (sukibimo_koeficientas_int >= 30 && sukibimo_koeficientas_int <= 80)
-          {
             sukibimas = String(sukibimo_koeficientas_int);
-            //display to the screen
-            display.println("");
-            display.setTextSize(2);
-            display.print("S: ");
-            display.println(sukibimas);
-            display.setTextSize(1);
-            display.println("");
-          }
         }
-//*********************************************************************
-        if (kelio_danga == "null")
-        {
-          kelio_danga = "-";
-          // display to the screen
-        }
-          
-        if (kelio_danga == "Sausa")
-        {
-          // do nothing
-        }
-        if (kelio_danga == "Dru0117gna")
-        {
-          display.println("");
-          display.setTextSize(2);
-          display.println("KD Sausa");
-          display.setTextSize(1);
-          display.println("");
-        }
-        else if (kelio_danga == "u0160lapia")
-        {
-          display.setTextSize(2);
-          display.println("KD Slapia");
-          display.setTextSize(1);
-          display.print("K: ");
-          display.println(krituliu_tipas);
-          display.print("Sukibimas: ");
-          display.println(sukibimas);
-        }
-        else if (kelio_danga == "Apsnigta")
-        {
-          display.setTextSize(2);
-          display.println("* SNIEGAS!");
-          display.println(sukibimas);
-          display.setTextSize(1);
-          display.print("K: ");
-          display.println(krituliu_tipas);
+        display.print("Sukibimas: ");
+        sukibimas.toUpperCase();
+        display.println(sukibimas);
+        display.println("");
 
-        }
+        if (kelio_danga == "null")
+          kelio_danga = "-";
+        if (kelio_danga == "Dru0117gna")
+          kelio_danga = "Dregna";
+        if (kelio_danga == "u0160lapia")
+          kelio_danga = "Slapia";
+        display.print("Danga: ");
+        kelio_danga.toUpperCase();
+        display.println(kelio_danga);
+        display.println("");
+
+//        // krituliu_tipas translation
+//        if (krituliu_tipas == "Nu0117ra" || krituliu_tipas == "N" || krituliu_tipas == "null")
+//          krituliu_tipas = "-";
+//        display.print("Krituliai: ");
+//        krituliu_tipas.toUpperCase();
+//        display.println(krituliu_tipas);
+//        display.println("");     
+
+        String dangos_temp_str;
+        if (isnan(dangos_temperatura))
+          dangos_temp_str = "-";
         else
-        {
-          display.setTextSize(1);
-          display.println("");
-          display.print("D: ");
-          display.println(kelio_danga);
-          display.print("K: ");
-          display.println(krituliu_tipas);
-          display.print("Sukibimas: ");
-          display.println(sukibimas);
-        }
+          dangos_temp_str = String(dangos_temperatura);
+        display.print("Dangos temp: ");
+        //krituliu_tipas.toUpperCase();
+        display.println(dangos_temp_str);
+        display.println(""); 
         
-        
-        display.println(surinkimo_data);
+        //display.println(surinkimo_data);
         display.display();
         
         
