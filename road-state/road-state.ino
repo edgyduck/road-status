@@ -91,10 +91,11 @@ void loop() {
         String krituliu_tipas = root_0["krituliu_tipas"]; // "N"
         String krituliu_kiekis = root_0["krituliu_kiekis"]; //
         float dangos_temperatura = root_0["dangos_temperatura"]; // "7.1"
-        int matomumas = root_0["matomumas"]; // 2000
+        String matomumas = root_0["matomumas"]; // 2000
         String kelio_danga = root_0["kelio_danga"]; // "Drėgna"
         float sukibimo_koeficientas = root_0["sukibimo_koeficientas"]; // "0.81" // "2.7"
 
+// Map station names
         const char* stotele;
         if (id == 1166)
             stotele = "VILNIUS";
@@ -114,16 +115,8 @@ void loop() {
             stotele = "SLABOTKE";
         if (id == 413)
             stotele = "GARLIAVA";
-        display.clearDisplay();
-        display.display();
-        display.setTextSize(2);
-        display.setTextColor(WHITE);
-        display.setCursor(0,0);
-        display.println(stotele);
-        display.setTextSize(1);
-        display.setTextColor(WHITE);
-        display.println("");
 
+// Define traction information
         String sukibimas;
         if (isnan(sukibimo_koeficientas))
           sukibimas = "-";
@@ -138,40 +131,85 @@ void loop() {
           else if (sukibimo_koeficientas_int >= 30 && sukibimo_koeficientas_int <= 80)
             sukibimas = String(sukibimo_koeficientas_int);
         }
-        display.print("Sukibimas: ");
-        sukibimas.toUpperCase();
-        display.println(sukibimas);
-        display.println("");
 
+// Define road surface state
         if (kelio_danga == "null")
           kelio_danga = "-";
         if (kelio_danga == "Dru0117gna")
           kelio_danga = "Dregna";
         if (kelio_danga == "u0160lapia")
           kelio_danga = "Slapia";
-        display.print("Danga: ");
-        kelio_danga.toUpperCase();
-        display.println(kelio_danga);
-        display.println("");
 
-//        // krituliu_tipas translation
-//        if (krituliu_tipas == "Nu0117ra" || krituliu_tipas == "N" || krituliu_tipas == "null")
-//          krituliu_tipas = "-";
-//        display.print("Krituliai: ");
-//        krituliu_tipas.toUpperCase();
-//        display.println(krituliu_tipas);
-//        display.println("");     
+// Define fall (rain/snow) information
+        if (krituliu_tipas == "Nu0117ra" || krituliu_tipas == "N" || krituliu_tipas == "null")
+          krituliu_tipas = "-";
+        else if (krituliu_tipas == "Ru016bkas")
+          krituliu_tipas = "Rukas";
 
+// Define visibility information
+        if (matomumas == "N" || matomumas == "null")
+          matomumas = "-";
+        else if (matomumas == "2000")
+          matomumas = "Geras";
+        else
+          matomumas = "Matomumas: " + matomumas;
+          
+// Define road surface temperature
         String dangos_temp_str;
         if (isnan(dangos_temperatura))
           dangos_temp_str = "-";
         else
           dangos_temp_str = String(dangos_temperatura);
-        display.print("Dangos temp: ");
-        //krituliu_tipas.toUpperCase();
-        display.println(dangos_temp_str);
-        display.println(""); 
+
+// Display all data on the screen:
+//  Station name
+        display.clearDisplay();
+        display.display();
+        display.setTextSize(2);
+        display.setTextColor(WHITE);
+        display.setCursor(0,0);
+        display.println(stotele);
+        display.setTextSize(1);
+        display.setTextColor(WHITE);
+        display.println("");
         
+//  Traction information
+        display.print("Sukibimas: ");
+        sukibimas.toUpperCase();
+        display.println(sukibimas);
+        display.println("");
+  
+// Road surface state
+        display.print("Danga: ");
+        kelio_danga.toUpperCase();
+        display.println(kelio_danga);
+
+// If visibility < 2000 then display visibility info
+        if (matomumas != "Geras")
+        {
+          matomumas.toUpperCase();
+          display.println(matomumas);
+          display.print("Krituliai: ");
+          krituliu_tipas.toUpperCase();
+          display.println(krituliu_tipas);
+        }
+
+//  Fall (rain/snow) details, if any
+        if (matomumas == "Geras" && krituliu_tipas != "-")
+        {
+          display.print("Krituliai: ");
+          krituliu_tipas.toUpperCase();
+          display.println(krituliu_tipas);
+          display.println("");
+        }
+        else
+        {
+// Road surface temperature
+          display.println("");
+          display.print("Dangos temp: ");
+          display.println(dangos_temp_str);
+          display.println("");
+        }
         //display.println(surinkimo_data);
         display.display();
         
