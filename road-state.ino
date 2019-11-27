@@ -15,8 +15,8 @@ Adafruit_SSD1306 display(-1);
 #endif
 
 // WiFi Parameters
-const char* ssid = "Good Life";
-const char* password = "LifeIsGood";
+const char* ssid = "";
+const char* password = "";
 
 void setup() {
   Serial.begin(115200);
